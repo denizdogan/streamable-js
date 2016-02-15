@@ -14,6 +14,20 @@ The package is available via NPM under the name `streamable-js`.
 
 I plan on using the documentation generator called [Documentation](4), but there's still some issues with it, so for now all of the documentation is in the source code.
 
+### Example
+
+```javascript
+import { Streamable } from 'streamable-js';
+
+let s = new Streamable();
+
+s.uploadVideo('my-video.mp4', 'My fancy video', resp => {
+	console.log(`Uploaded to https://streamable.com/${resp.shortcode}`);
+}, err => {
+	console.error('Something went wrong!');
+})
+```
+
 To use it, do `new Streamable()`. If you want to use it with HTTP basic access authentication, use `new AuthStreamable(user, pass)` instead.
 
 ## Development and pull requests
