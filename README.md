@@ -14,6 +14,8 @@ The package is available via NPM under the name `streamable-js`.
 
 I plan on using the documentation generator called [Documentation](4), but there's still some issues with it, so for now all of the documentation is in the source code.
 
+There are only two exported classes, `Streamable` and `AuthStreamable`.
+
 ### Example
 
 ```javascript
@@ -21,14 +23,33 @@ import { Streamable } from 'streamable-js';
 
 let s = new Streamable();
 
-s.uploadVideo('my-video.mp4', 'My fancy video', resp => {
+s.uploadVideo('my-video.mp4', 'My fancy video').then(resp => {
 	console.log(`Uploaded to https://streamable.com/${resp.shortcode}`);
 }, err => {
 	console.error('Something went wrong!');
 })
 ```
 
-To use it, do `new Streamable()`. If you want to use it with HTTP basic access authentication, use `new AuthStreamable(user, pass)` instead.
+#### Authenticating
+
+To use the library as an authenticated user, it's the same thing but with `AuthStreamable` instead:
+
+```javascript
+import { AuthStreamable } from 'streamable-js';
+
+let s = new AuthStreamable(username, password);
+```
+
+This also exposes one more method, `retrieveMe`, which retrieves information about the logged-in user.
+
+#### Using ECMAScript 5
+
+If you use ECMAScript 5 and `require` from CommonJS, remember that you are importing the *module*, not the class itself. Therefore, you'd have to do something like this:
+
+```javascript
+var Streamable = require('streamable-js');
+var client = new Streamable.Streamable();
+```
 
 ## Development and pull requests
 
