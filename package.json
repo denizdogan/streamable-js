@@ -1,6 +1,6 @@
 {
   "name": "streamable-js",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A Node.js API for Streamable with Promises",
   "main": "src/index.js",
   "scripts": {
