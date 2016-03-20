@@ -37,23 +37,39 @@ var Streamable = exports.Streamable = function () {
 	}
 
 	/**
-  * Upload a video to Streamable
-  * @param {string} filePath the path to the file
-  * @param {string} [title] title of the video
+  * Upload a video stream to Streamable
+  * @param {string} stream the stream of the file
+  * @param {string} [title=''] title of the video
   * @returns A promise to return the response
   */
 
 
 	_createClass(Streamable, [{
-		key: 'uploadVideo',
-		value: function uploadVideo(filePath, title) {
+		key: 'uploadStream',
+		value: function uploadStream(stream) {
+			var title = arguments.length <= 1 || arguments[1] === undefined ? '' : arguments[1];
+
 			var data = {
-				file: _fs2.default.createReadStream(filePath)
+				file: stream,
+				title: title
 			};
-			if (title) {
-				data.title = title;
-			}
 			return this._post('/upload', data);
+		}
+
+		/**
+   * Upload a video to Streamable
+   * @param {string} filePath the path to the file
+   * @param {string} [title=''] title of the video
+   * @returns A promise to return the response
+   */
+
+	}, {
+		key: 'uploadVideo',
+		value: function uploadVideo(filePath) {
+			var title = arguments.length <= 1 || arguments[1] === undefined ? '' : arguments[1];
+
+			var stream = _fs2.default.createReadStream(filePath);
+			return this.uploadStream(stream, title);
 		}
 
 		/**
@@ -68,10 +84,7 @@ var Streamable = exports.Streamable = function () {
 		value: function importVideo(url) {
 			var title = arguments.length <= 1 || arguments[1] === undefined ? '' : arguments[1];
 
-			var qs = { url: url };
-			if (title) {
-				qs.title = title;
-			}
+			var qs = { url: url, title: title };
 			return this._get('/import', qs);
 		}
 
