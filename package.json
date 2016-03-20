@@ -2,11 +2,11 @@
   "name": "streamable-js",
   "version": "0.0.2",
   "description": "A Node.js API for Streamable with Promises",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "compile": "babel -d src lib",
-    "watch": "babel -w -d src lib",
-    "uglify": "babel --minified --compact true --no-comments -d src lib",
+    "compile": "babel -d dist src",
+    "watch": "babel -w -d dist src",
+    "uglify": "babel --minified --compact true --no-comments -d dist src",
     "dist": "npm run uglify"
   },
   "author": "Deniz Dogan <deniz@dogan.se>",
