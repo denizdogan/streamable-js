@@ -1,7 +1,7 @@
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-	value: true
+  value: true
 });
 exports.AuthStreamable = exports.Streamable = undefined;
 
@@ -32,209 +32,211 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var API_BASE_URL = 'https://api.streamable.com';
 
 var Streamable = exports.Streamable = function () {
-	function Streamable() {
-		_classCallCheck(this, Streamable);
-	}
+  function Streamable() {
+    _classCallCheck(this, Streamable);
+  }
 
-	/**
-  * Upload a video stream to Streamable
-  * @param {string} stream the stream of the file
-  * @param {string} [title=''] title of the video
-  * @returns A promise to return the response
-  */
-
-
-	_createClass(Streamable, [{
-		key: 'uploadStream',
-		value: function uploadStream(stream) {
-			var title = arguments.length <= 1 || arguments[1] === undefined ? '' : arguments[1];
-
-			var data = {
-				file: stream,
-				title: title
-			};
-			return this._post('/upload', data);
-		}
-
-		/**
-   * Upload a video to Streamable
-   * @param {string} filePath the path to the file
+  /**
+   * Upload a video stream to Streamable
+   * @param {string} stream the stream of the file
    * @param {string} [title=''] title of the video
-   * @returns A promise to return the response
+   * @return {Promise} A promise to return the response
    */
 
-	}, {
-		key: 'uploadVideo',
-		value: function uploadVideo(filePath) {
-			var title = arguments.length <= 1 || arguments[1] === undefined ? '' : arguments[1];
 
-			var stream = _fs2.default.createReadStream(filePath);
-			return this.uploadStream(stream, title);
-		}
+  _createClass(Streamable, [{
+    key: 'uploadStream',
+    value: function uploadStream(stream) {
+      var title = arguments.length <= 1 || arguments[1] === undefined ? '' : arguments[1];
 
-		/**
-   * Import a video to Streamable
-   * @param {string} url the URL to the video
-   * @param {string} [title] title of the video
-   * @returns A promise to return the response
-   */
+      var data = {
+        file: stream,
+        title: title
+      };
+      return this._post('/upload', data);
+    }
 
-	}, {
-		key: 'importVideo',
-		value: function importVideo(url) {
-			var title = arguments.length <= 1 || arguments[1] === undefined ? '' : arguments[1];
+    /**
+     * Upload a video to Streamable
+     * @param {string} filePath the path to the file
+     * @param {string} [title=''] title of the video
+     * @return {Promise} A promise to return the response
+     */
 
-			var qs = { url: url, title: title };
-			return this._get('/import', qs);
-		}
+  }, {
+    key: 'uploadVideo',
+    value: function uploadVideo(filePath) {
+      var title = arguments.length <= 1 || arguments[1] === undefined ? '' : arguments[1];
 
-		/**
-   * Retrieve a video from Streamable
-   * @param {string} shortcode the shortcode of the video
-   * @returns A promise to return the response
-   */
+      var stream = _fs2.default.createReadStream(filePath);
+      return this.uploadStream(stream, title);
+    }
 
-	}, {
-		key: 'retrieveVideo',
-		value: function retrieveVideo(shortcode) {
-			return this._get('/videos/' + shortcode);
-		}
+    /**
+     * Import a video to Streamable
+     * @param {string} url the URL to the video
+     * @param {string} [title] title of the video
+     * @return {Promise} A promise to return the response
+     */
 
-		/**
-   * Retrieve a user on Streamable
-   * @param {string} username the name of the user
-   * @returns A promise to return the response
-   */
+  }, {
+    key: 'importVideo',
+    value: function importVideo(url) {
+      var title = arguments.length <= 1 || arguments[1] === undefined ? '' : arguments[1];
 
-	}, {
-		key: 'retrieveUser',
-		value: function retrieveUser(username) {
-			return this._get('/users/' + username);
-		}
+      var qs = { url: url, title: title };
+      return this._get('/import', qs);
+    }
 
-		/**
-   * Make an HTTP request to Streamable
-   * @param {string} method the HTTP method to use
-   * @param {string} path the path
-   * @param {object} [options={}] additional options
-   * @returns A promise to return the response
-   */
+    /**
+     * Retrieve a video from Streamable
+     * @param {string} shortcode the shortcode of the video
+     * @return {Promise} A promise to return the response
+     */
 
-	}, {
-		key: '_request',
-		value: function _request(method, path) {
-			var options = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+  }, {
+    key: 'retrieveVideo',
+    value: function retrieveVideo(shortcode) {
+      return this._get('/videos/' + shortcode);
+    }
 
-			var url = (0, _urlJoin2.default)(API_BASE_URL, path);
-			options = this._prepare_options(method, path, options);
-			return (0, _requestPromise2.default)(url, options);
-		}
+    /**
+     * Retrieve a user on Streamable
+     * @param {string} username the name of the user
+     * @return {Promise} A promise to return the response
+     */
 
-		/**
-   * Make an HTTP GET request to Streamable
-   * @param {string} path the path
-   * @param {object} [qs={}] the querystring
-   * @returns A promise to return the response
-   */
+  }, {
+    key: 'retrieveUser',
+    value: function retrieveUser(username) {
+      return this._get('/users/' + username);
+    }
 
-	}, {
-		key: '_get',
-		value: function _get(path) {
-			var qs = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+    /**
+     * Make an HTTP request to Streamable
+     * @param {string} method the HTTP method to use
+     * @param {string} path the path
+     * @param {object} [options={}] additional options
+     * @return {Promise} A promise to return the response
+     */
 
-			return this._request('GET', path, { qs: qs });
-		}
+  }, {
+    key: '_request',
+    value: function _request(method, path) {
+      var options = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
 
-		/**
-   * Make an HTTP POST request as "multipart/form" to Streamable
-   * @param {string} path the path
-   * @param {object} [data={}] the data
-   * @returns A promise to return the response
-   */
+      var url = (0, _urlJoin2.default)(API_BASE_URL, path);
+      options = this._prepare_options(method, path, options);
+      return (0, _requestPromise2.default)(url, options);
+    }
 
-	}, {
-		key: '_post',
-		value: function _post(path) {
-			var data = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+    /**
+     * Make an HTTP GET request to Streamable
+     * @param {string} path the path
+     * @param {object} [qs={}] the querystring
+     * @return {Promise} A promise to return the response
+     */
 
-			return this._request('POST', path, {
-				formData: data
-			});
-		}
+  }, {
+    key: '_get',
+    value: function _get(path) {
+      var qs = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
-		/**
-   * Prepare an object with request options
-   * @param {string} method the HTTP method to use
-   * @param {string} path the path to request
-   * @param {object} [options={}] additional request options
-   * @returns A promise to return the response
-   */
+      return this._request('GET', path, { qs: qs });
+    }
 
-	}, {
-		key: '_prepare_options',
-		value: function _prepare_options(method, path) {
-			var options = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+    /**
+     * Make an HTTP POST request as "multipart/form" to Streamable
+     * @param {string} path the path
+     * @param {object} [data={}] the data
+     * @return {Promise} A promise to return the response
+     */
 
-			return Object.assign({}, options, {
-				method: method,
-				json: true
-			});
-		}
-	}]);
+  }, {
+    key: '_post',
+    value: function _post(path) {
+      var data = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
-	return Streamable;
+      return this._request('POST', path, {
+        formData: data
+      });
+    }
+
+    /**
+     * Prepare an object with request options
+     * @param {string} method the HTTP method to use
+     * @param {string} path the path to request
+     * @param {object} [options={}] additional request options
+     * @return {object} Request options object
+     */
+
+  }, {
+    key: '_prepare_options',
+    value: function _prepare_options(method, path) {
+      var options = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+
+      return Object.assign({}, options, {
+        method: method,
+        json: true
+      });
+    }
+  }]);
+
+  return Streamable;
 }();
 
 var AuthStreamable = exports.AuthStreamable = function (_Streamable) {
-	_inherits(AuthStreamable, _Streamable);
+  _inherits(AuthStreamable, _Streamable);
 
-	/**
-  * @constructor
-  * @param {string} username The username to log in with
-  * @param {string} password The password to log in with
-  */
-
-	function AuthStreamable(username, password) {
-		_classCallCheck(this, AuthStreamable);
-
-		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(AuthStreamable).call(this));
-
-		_this.username = username;
-		_this.password = password;
-		return _this;
-	}
-
-	/**
-  * Retrieve information about the currently logged-in user
-  * @returns A promise to return the response
-  */
-
-
-	_createClass(AuthStreamable, [{
-		key: 'retrieveMe',
-		value: function retrieveMe() {
-			return this._get('/me');
-		}
-
-		/**
-   * Prepare an object with request options, including authentication
-   * @returns A promise to return the response
+  /**
+   * @constructor
+   * @param {string} username The username to log in with
+   * @param {string} password The password to log in with
    */
 
-	}, {
-		key: '_prepare_options',
-		value: function _prepare_options(method, path) {
-			var options = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+  function AuthStreamable(username, password) {
+    _classCallCheck(this, AuthStreamable);
 
-			options = _get2(Object.getPrototypeOf(AuthStreamable.prototype), '_prepare_options', this).call(this, method, path, options);
-			return Object.assign({}, options, {
-				auth: {
-					username: this.username,
-					password: this.password
-				}
-			});
-		}
-	}]);
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(AuthStreamable).call(this));
 
-	return AuthStreamable;
+    _this.username = username;
+    _this.password = password;
+    return _this;
+  }
+
+  /**
+   * Retrieve information about the currently logged-in user
+   * @return {Promise} A promise to return the response
+   */
+
+
+  _createClass(AuthStreamable, [{
+    key: 'retrieveMe',
+    value: function retrieveMe() {
+      return this._get('/me');
+    }
+
+    /**
+     * Prepare an object with request options, including authentication
+     * @param {string} method The HTTP method
+     * @param {string} path The HTTP path
+     * @return {object} Request options object
+     */
+
+  }, {
+    key: '_prepare_options',
+    value: function _prepare_options(method, path) {
+      var options = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+
+      options = _get2(Object.getPrototypeOf(AuthStreamable.prototype), '_prepare_options', this).call(this, method, path, options);
+      return Object.assign({}, options, {
+        auth: {
+          username: this.username,
+          password: this.password
+        }
+      });
+    }
+  }]);
+
+  return AuthStreamable;
 }(Streamable);

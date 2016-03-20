@@ -53,12 +53,7 @@ var client = new Streamable.Streamable();
 
 ## Development and pull requests
 
-The source code lies in the "lib" directory. The uglified ES5 code lives in the "src" directory.
-
-* Use tabs, not spaces.
-* Document all public methods.
-* Document all non-obvious private methods.
-* Run `npm run dist` before committing
+The source code lies in the "src" directory. The transpiled ES5 code lives in the "dist" directory.
 
 ## TODO
 
