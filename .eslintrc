@@ -1,12 +1,8 @@
 {
-  "parserOptions": {
-    "ecmaVersion": 7,
-    "sourceType": "module",
-    "ecmaFeatures": {
-      "experimentalObjectRestSpread": true
-    },
-  },
-  "rules": {
-    "semi": 2
+  "extends": "eslint:recommended",
+  "parser": "babel-eslint",
+  "env": {
+    "node": true,
+    "es6": true
   }
 }
