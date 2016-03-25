@@ -21,12 +21,11 @@ There are only two exported classes, `Streamable` and `AuthStreamable`.
 ```javascript
 import { Streamable } from 'streamable-js';
 
-let s = new Streamable();
-
-s.uploadVideo('my-video.mp4', 'My fancy video').then(resp => {
+const streamable = new Streamable();
+streamable.uploadVideo('my-video.mp4', 'My fancy video').then(resp => {
 	console.log(`Uploaded to https://streamable.com/${resp.shortcode}`);
 }, err => {
-	console.error('Something went wrong!');
+	console.error('Something went wrong! ${err}');
 })
 ```
 
@@ -35,9 +34,13 @@ s.uploadVideo('my-video.mp4', 'My fancy video').then(resp => {
 To use the library as an authenticated user, it's the same thing but with `AuthStreamable` instead:
 
 ```javascript
-import { AuthStreamable } from 'streamable-js';
+import { AuthStreamable } from './index';
+import { open } from 'openurl';
 
-let s = new AuthStreamable(username, password);
+const streamable = new AuthStreamable('<username>', '<password>');
+streamable.importVideo('http://foobar.com/video.mp4', 'My example video').then(resp => {
+	open(`https://streamable.com/${resp.shortcode}`);
+});
 ```
 
 This also exposes one more method, `retrieveMe`, which retrieves information about the logged-in user.
