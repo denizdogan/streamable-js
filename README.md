@@ -1,8 +1,8 @@
 # streamable-js
 
-This is a JavaScript library for [Streamable's API](1).
+This is a JavaScript library for [Streamable's API](https://streamable.com/documentation).
 
-It's meant to be minimalistic and uses [JavaScript promises](2) and [ECMAScript 6](3). Transpilation is done using Babel 6.
+It's meant to be minimalistic and uses [JavaScript promises](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise) and [ECMAScript 6](http://es6-features.org/). Transpilation is done using Babel 6.
 
 The package is available via NPM under the name `streamable-js`.
 
@@ -12,7 +12,7 @@ The package is available via NPM under the name `streamable-js`.
 
 ## Usage
 
-I plan on using the documentation generator called [Documentation](4), but there's still some issues with it, so for now all of the documentation is in the source code.
+I plan on using the documentation generator called [Documentation](https://github.com/documentationjs/documentation/), but there's still some issues with it, so for now all of the documentation is in the source code.
 
 There are only two exported classes, `Streamable` and `AuthStreamable`.
 
@@ -63,8 +63,3 @@ The source code lies in the "src" directory. The transpiled ES5 code lives in th
 ## TODO
 
 See the project issues.
-
-[1]: https://streamable.com/documentation
-[2]: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise
-[3]: http://es6-features.org/
-[4]: https://github.com/documentationjs/documentation/
