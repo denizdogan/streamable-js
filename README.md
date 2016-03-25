@@ -24,8 +24,8 @@ import { Streamable } from 'streamable-js';
 const streamable = new Streamable();
 streamable.uploadVideo('my-video.mp4', 'My fancy video').then(resp => {
 	console.log(`Uploaded to https://streamable.com/${resp.shortcode}`);
-}, err => {
-	console.error('Something went wrong! ${err}');
+}).catch(err => {
+	console.error('Something went wrong: ${err}');
 })
 ```
 
@@ -40,6 +40,8 @@ import { open } from 'openurl';
 const streamable = new AuthStreamable('<username>', '<password>');
 streamable.importVideo('http://foobar.com/video.mp4', 'My example video').then(resp => {
 	open(`https://streamable.com/${resp.shortcode}`);
+}).catch(err => {
+	console.error('Aw, shucks! ${err}');
 });
 ```
 
