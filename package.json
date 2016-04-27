@@ -6,8 +6,6 @@
   "scripts": {
     "compile": "babel -d dist src",
     "watch": "babel -w -d dist src",
-    "uglify": "babel --minified --compact true --no-comments -d dist src",
-    "dist": "npm run uglify",
     "lint": "standard src"
   },
   "author": "Deniz Dogan <deniz@dogan.se>",
