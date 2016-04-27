@@ -1,5 +1,7 @@
 # streamable-js
 
+[![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
+
 This is a JavaScript library for [Streamable's API](https://streamable.com/documentation).
 
 It's meant to be minimalistic and uses [JavaScript promises](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise) (implemented using [Bluebird](http://bluebirdjs.com/)) and [ECMAScript 6](http://es6-features.org/). Transpilation is done using Babel 6.
