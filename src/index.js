@@ -13,9 +13,7 @@ export class Streamable {
    * @return {Promise} A promise to return the response
    */
   uploadStream (stream, title = '') {
-    const data = {
-      file: stream,
-    title}
+    const data = { file: stream, title: title }
     return this._post('/upload', data)
   }
 
@@ -37,7 +35,7 @@ export class Streamable {
    * @return {Promise} A promise to return the response
    */
   importVideo (url, title = '') {
-    const qs = {url, title}
+    const qs = { url: url, title: title }
     return this._get('/import', qs)
   }
 
@@ -79,7 +77,7 @@ export class Streamable {
    * @return {Promise} A promise to return the response
    */
   _get (path, qs = {}) {
-    return this._request('GET', path, {qs})
+    return this._request('GET', path, { qs: qs })
   }
 
   /**
@@ -89,9 +87,7 @@ export class Streamable {
    * @return {Promise} A promise to return the response
    */
   _post (path, data = {}) {
-    return this._request('POST', path, {
-      formData: data
-    })
+    return this._request('POST', path, { formData: data })
   }
 
   /**
@@ -102,10 +98,11 @@ export class Streamable {
    * @return {object} Request options object
    */
   _prepareOptions (method, path, options = {}) {
-    return Object.assign({}, options, {
-      method,
+    let forced = {
+      method: method,
       json: true
-    })
+    }
+    return Object.assign({}, options, forced)
   }
 }
 
@@ -138,11 +135,10 @@ export class AuthStreamable extends Streamable {
    */
   _prepareOptions (method, path, options = {}) {
     options = super._prepareOptions(method, path, options)
-    return Object.assign({}, options, {
-      auth: {
-        username: this.username,
-        password: this.password
-      }
-    })
+    let auth = {
+      username: this.username,
+      password: this.password
+    }
+    return Object.assign({}, options, { auth: auth })
   }
 }
