@@ -14,7 +14,7 @@ The package is available via NPM under the name `streamable-js`.
 
 ## Usage
 
-I plan on using the documentation generator called [Documentation](https://github.com/documentationjs/documentation/), but there's still some issues with it, so for now all of the documentation is in the source code.
+There is no formal documentation other than this README and the source code itself. Everything is pretty simple at this point, so most things should be obvious.
 
 There are only two exported classes, `Streamable` and `AuthStreamable`.
 
@@ -49,7 +49,9 @@ streamable.importVideo('http://foobar.com/video.mp4', 'My example video').then((
 
 #### Using ECMAScript 5
 
-If you use ECMAScript 5 and `require` from CommonJS, remember that you are importing the *module*, not the class itself. Therefore, you'd have to do something like this:
+You can use this library with ECMAScript 5, in fact if you install it using `npm`, you are getting the ECMAScript 5 version of the code.
+
+If you use ECMAScript 5, remember that you are requiring the *module*, not the class itself. Therefore, you do something like this:
 
 ```javascript
 var Streamable = require('streamable-js')
