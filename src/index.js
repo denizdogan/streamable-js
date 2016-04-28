@@ -1,6 +1,8 @@
 import fs from 'fs'
 import request from 'request-promise'
 import urljoin from 'url-join'
+import Promise from 'bluebird'
+import retry from 'bluebird-retry'
 
 const API_BASE_URL = 'https://api.streamable.com'
 
@@ -55,6 +57,26 @@ export class Streamable {
    */
   retrieveUser (username) {
     return this._get(`/users/${username}`)
+  }
+
+  /**
+   * Wait for a specific status of a video
+   * @param {string} shortcode the shortcode of the video
+   * @param {number} status status to wait for
+   * @param {object} config configuration for bluebird-retry
+   * @return {Promise} A promise to return the response
+   */
+  waitFor (shortcode, status, config = {}) {
+    let go = () => {
+      return this.retrieveVideo(shortcode).then((resp) => {
+        if (resp.status === status) {
+          return Promise.resolve(resp)
+        }
+        return Promise.reject('not done yet')
+      })
+    }
+
+    return retry(go, config)
   }
 
   /**
