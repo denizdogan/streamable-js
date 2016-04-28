@@ -3,6 +3,7 @@ import request from 'request-promise'
 import urljoin from 'url-join'
 import Promise from 'bluebird'
 import retry from 'bluebird-retry'
+export { STATUS_CODES } from './constants'
 
 const API_BASE_URL = 'https://api.streamable.com'
 
