@@ -18,42 +18,29 @@ There is no formal documentation other than this README and the source code itse
 
 There are only two exported classes, `Streamable` and `AuthStreamable`.
 
-### Example
+### Example usage
+
+This will upload the local file "my-video.mp4" titled "My video" on Streamable, wait for the video processing to complete, then print the video status.
 
 ```javascript
-import { Streamable } from 'streamable-js'
+import { Streamable, STATUS_CODE } from 'streamable-js'
 
 const streamable = new Streamable()
-streamable.uploadVideo('my-video.mp4', 'My fancy video').then((resp) => {
-  console.log(`Uploaded to https://streamable.com/${resp.shortcode}`)
-}).catch((err) => {
-  console.error('Something went wrong: ${err}')
-})
+streamable.uploadVideo('my-video.mp4', 'My video').then((resp) =>
+  streamable.waitFor(resp.shortcode, STATUS_CODE.READY)
+).then((resp) =>
+  console.log(resp)
+)
 ```
 
 #### Authenticating
 
-To use the library as an authenticated user, it's the same thing but with `AuthStreamable` instead. This also exposes one more method, `retrieveMe`, which retrieves information about the logged-in user.
+To use the library as an authenticated Streamable user, do everything exactly the same, but with the `AuthStreamable` class. This also exposes one more method, `retrieveMe`, which retrieves information about the logged-in user.
 
 ```javascript
-import { AuthStreamable } from './index'
-import { open } from 'openurl'
-
-const streamable = new AuthStreamable('<username>', '<password>')
-streamable.importVideo('http://foobar.com/video.mp4', 'My example video').then((resp) => {
-  open(`https://streamable.com/${resp.shortcode}`)
-}).catch((err) => {
-  console.error('Aw, shucks! ${err}')
-})
+import { AuthStreamable } from 'streamable-js'
 ```
 
-#### Using ECMAScript 5
+##### OAuth2
 
-You can use this library with ECMAScript 5, in fact if you install it using `npm`, you are getting the ECMAScript 5 version of the code.
-
-If you use ECMAScript 5, remember that you are requiring the *module*, not the class itself. Therefore, you do something like this:
-
-```javascript
-var Streamable = require('streamable-js')
-var client = new Streamable.Streamable()
-```
+There is currently no support for OAuth2. Pull requests are welcome!
