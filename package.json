@@ -22,13 +22,5 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/denizdogan/streamable-js.git"
-  },
-  "xo": {
-    "esnext": true,
-    "rules": {
-      "linebreak-style": 0,
-      "camelcase": 1,
-      "no-useless-constructor": 0
-    }
   }
 }
