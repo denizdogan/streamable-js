@@ -4,9 +4,9 @@
   "description": "A Node.js API for Streamable with Promises",
   "main": "dist/index.js",
   "scripts": {
-    "compile": "babel -d dist src",
-    "watch": "babel -w -d dist src",
-    "lint": "standard src"
+    "compile": "babel src/index.js -o dist/index.js",
+    "watch": "babel src/index.js -w -o dist/index.js",
+    "lint": "standard src/index.js"
   },
   "author": "Deniz Dogan <deniz@dogan.se>",
   "license": "MIT",
