@@ -129,24 +129,22 @@ var Streamable = exports.Streamable = function () {
     /**
      * Wait for a specific status of a video
      * @param {string} shortcode the shortcode of the video
-     * @param {number} status status to wait for
-     * @param {object} config configuration for bluebird-retry
-     * @return {Promise} A promise to return the response
+     * @param {number} [status=STATUS_CODE.READY] status to wait for
+     * @param {object} [config={}] configuration for bluebird-retry
+     * @return {Promise} A promise which resolves on the given status
      */
 
   }, {
     key: 'waitFor',
-    value: function waitFor(shortcode, status) {
+    value: function waitFor(shortcode) {
       var _this = this;
 
+      var status = arguments.length <= 1 || arguments[1] === undefined ? STATUS_CODE.READY : arguments[1];
       var config = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
 
       var go = function go() {
         return _this.retrieveVideo(shortcode).then(function (resp) {
-          if (resp.status === status) {
-            return _bluebird2.default.resolve(resp);
-          }
-          return _bluebird2.default.reject('not done yet');
+          return resp.status === status ? _bluebird2.default.resolve(resp) : _bluebird2.default.reject(resp);
         });
       };
 
