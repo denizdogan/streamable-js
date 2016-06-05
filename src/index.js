@@ -67,7 +67,7 @@ export class Streamable {
    * @param {object} [config={}] configuration for bluebird-retry
    * @return {Promise} A promise which resolves on the given status
    */
-  waitFor (shortcode, status = STATUS_CODE.READY , config = {}) {
+  waitFor (shortcode, status = STATUS_CODE.READY, config = {}) {
     let go = () => this.retrieveVideo(shortcode).then((resp) => {
       return resp.status === status
         ? Promise.resolve(resp)
