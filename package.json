@@ -11,14 +11,14 @@
   "author": "Deniz Dogan <deniz@dogan.se>",
   "license": "MIT",
   "dependencies": {
+    "bluebird": "^3.3.5",
+    "bluebird-retry": "^0.6.1",
     "request-promise": "^2.0.0",
     "url-join": "0.0.1"
   },
   "devDependencies": {
     "babel-cli": "^6.5.1",
     "babel-preset-es2015": "^6.5.0",
-    "bluebird": "^3.3.5",
-    "bluebird-retry": "^0.6.1",
     "standard": "^6.0.8"
   },
   "repository": {
