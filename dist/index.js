@@ -1,59 +1,105 @@
 'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.AuthStreamable = exports.Streamable = exports.STATUS_CODE = undefined;
+function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
-var _get2 = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+var fs = _interopDefault(require('fs'));
+var request = _interopDefault(require('request-promise'));
+var urljoin = _interopDefault(require('url-join'));
+var Promise = _interopDefault(require('bluebird'));
+var retry = _interopDefault(require('bluebird-retry'));
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var babelHelpers = {};
 
-var _constants = require('./constants');
-
-Object.defineProperty(exports, 'STATUS_CODE', {
-  enumerable: true,
-  get: function get() {
-    return _constants.STATUS_CODE;
+babelHelpers.classCallCheck = function (instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
   }
-});
+};
 
-var _fs = require('fs');
+babelHelpers.createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
 
-var _fs2 = _interopRequireDefault(_fs);
+  return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) defineProperties(Constructor, staticProps);
+    return Constructor;
+  };
+}();
 
-var _requestPromise = require('request-promise');
+babelHelpers.get = function get(object, property, receiver) {
+  if (object === null) object = Function.prototype;
+  var desc = Object.getOwnPropertyDescriptor(object, property);
 
-var _requestPromise2 = _interopRequireDefault(_requestPromise);
+  if (desc === undefined) {
+    var parent = Object.getPrototypeOf(object);
 
-var _urlJoin = require('url-join');
+    if (parent === null) {
+      return undefined;
+    } else {
+      return get(parent, property, receiver);
+    }
+  } else if ("value" in desc) {
+    return desc.value;
+  } else {
+    var getter = desc.get;
 
-var _urlJoin2 = _interopRequireDefault(_urlJoin);
+    if (getter === undefined) {
+      return undefined;
+    }
 
-var _bluebird = require('bluebird');
+    return getter.call(receiver);
+  }
+};
 
-var _bluebird2 = _interopRequireDefault(_bluebird);
+babelHelpers.inherits = function (subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+  }
 
-var _bluebirdRetry = require('bluebird-retry');
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+};
 
-var _bluebirdRetry2 = _interopRequireDefault(_bluebirdRetry);
+babelHelpers.possibleConstructorReturn = function (self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  return call && (typeof call === "object" || typeof call === "function") ? call : self;
+};
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+babelHelpers;
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var STATUS_CODE$1 = {
+  UPLOADING: 0,
+  PROCESSING: 1,
+  READY: 2, // at least one file ready
+  ERROR: 3
+};
 
 var API_BASE_URL = 'https://api.streamable.com';
 
-var Streamable = exports.Streamable = function () {
+var Streamable = function () {
   function Streamable() {
-    _classCallCheck(this, Streamable);
+    babelHelpers.classCallCheck(this, Streamable);
   }
 
-  _createClass(Streamable, [{
+  babelHelpers.createClass(Streamable, [{
     key: 'uploadStream',
 
 
@@ -82,7 +128,7 @@ var Streamable = exports.Streamable = function () {
     value: function uploadVideo(filePath) {
       var title = arguments.length <= 1 || arguments[1] === undefined ? '' : arguments[1];
 
-      var stream = _fs2.default.createReadStream(filePath);
+      var stream = fs.createReadStream(filePath);
       return this.uploadStream(stream, title);
     }
 
@@ -144,11 +190,11 @@ var Streamable = exports.Streamable = function () {
 
       var go = function go() {
         return _this.retrieveVideo(shortcode).then(function (resp) {
-          return resp.status === status ? _bluebird2.default.resolve(resp) : _bluebird2.default.reject(resp);
+          return resp.status === status ? Promise.resolve(resp) : Promise.reject(resp);
         });
       };
 
-      return (0, _bluebirdRetry2.default)(go, config);
+      return retry(go, config);
     }
 
     /**
@@ -164,9 +210,9 @@ var Streamable = exports.Streamable = function () {
     value: function _request(method, path) {
       var options = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
 
-      var url = (0, _urlJoin2.default)(API_BASE_URL, path);
+      var url = urljoin(API_BASE_URL, path);
       options = this._prepareOptions(method, path, options);
-      return (0, _requestPromise2.default)(url, options);
+      return request(url, options);
     }
 
     /**
@@ -219,12 +265,12 @@ var Streamable = exports.Streamable = function () {
       return Object.assign({}, options, forced);
     }
   }]);
-
   return Streamable;
 }();
 
-var AuthStreamable = exports.AuthStreamable = function (_Streamable) {
-  _inherits(AuthStreamable, _Streamable);
+var AuthStreamable = function (_Streamable) {
+  babelHelpers.inherits(AuthStreamable, _Streamable);
+
 
   /**
    * @constructor
@@ -233,9 +279,9 @@ var AuthStreamable = exports.AuthStreamable = function (_Streamable) {
    */
 
   function AuthStreamable(username, password) {
-    _classCallCheck(this, AuthStreamable);
+    babelHelpers.classCallCheck(this, AuthStreamable);
 
-    var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(AuthStreamable).call(this));
+    var _this2 = babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(AuthStreamable).call(this));
 
     _this2.username = username;
     _this2.password = password;
@@ -248,7 +294,7 @@ var AuthStreamable = exports.AuthStreamable = function (_Streamable) {
    */
 
 
-  _createClass(AuthStreamable, [{
+  babelHelpers.createClass(AuthStreamable, [{
     key: 'retrieveMe',
     value: function retrieveMe() {
       return this._get('/me');
@@ -266,7 +312,7 @@ var AuthStreamable = exports.AuthStreamable = function (_Streamable) {
     value: function _prepareOptions(method, path) {
       var options = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
 
-      options = _get2(Object.getPrototypeOf(AuthStreamable.prototype), '_prepareOptions', this).call(this, method, path, options);
+      options = babelHelpers.get(Object.getPrototypeOf(AuthStreamable.prototype), '_prepareOptions', this).call(this, method, path, options);
       var auth = {
         username: this.username,
         password: this.password
@@ -274,6 +320,10 @@ var AuthStreamable = exports.AuthStreamable = function (_Streamable) {
       return Object.assign({}, options, { auth: auth });
     }
   }]);
-
   return AuthStreamable;
 }(Streamable);
+
+exports.Streamable = Streamable;
+exports.AuthStreamable = AuthStreamable;
+exports.STATUS_CODE = STATUS_CODE$1;
+//# sourceMappingURL=index.js.map
